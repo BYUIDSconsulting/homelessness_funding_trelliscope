@@ -338,11 +338,4 @@ trel_prog %>%
 
 ```
 
-```{r}
-testd <- testdata %>%
-  rename(year = year_budget)
-
-all_dat <- left_join(poll_data, testd, by = 'year')
-
-```
 
