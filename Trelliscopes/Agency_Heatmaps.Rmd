@@ -1,0 +1,348 @@
+---
+author: "Becca Ebersole"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:  
+    keep_md: true
+    toc: true
+    toc_float: true
+    code_folding: hide
+    fig_height: 6
+    fig_width: 12
+    fig_align: 'center'
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r load_libraries, include=FALSE}
+# Use this R-Chunk to load all your libraries!
+#install.packages("tidyverse") # run this line once in console to get package
+# install.packages("remotes") # if "remotes" is not already installed
+#devtools::install_github("hafen/trelliscopejs")
+devtools::install_github("wilkox/ggfittext")
+library(tidyverse)
+library(trelliscopejs)
+library(plotly)
+library(leaflet)
+library(maps)
+library(USAboundaries)
+library(ggplot2)
+library(purrr)
+library(tidyr)
+library(tidyselect)
+library(ggfittext)
+library(networkD3)
+```
+
+```{r load_data}
+# Use this R-Chunk to import all your datasets!
+testdata <- read.csv('/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/data/homelessness/fsr_input.tsv.gz', sep = ',', header = TRUE)
+
+#political affiliation data by county
+poll_data <- read.table('/Users/Becca/Downloads/countypres_2000-2020.tab', sep = '\t', header = TRUE)
+
+#demographics of each county
+```
+
+```{r}
+#make a heat plot nested by department
+
+#Year amount awarded
+#Department and the agency
+#Relevant Columns:
+#-name_department_award
+#-name_agency_award
+#-amount_award
+#-year_budget
+
+test <- testdata[!is.na(testdata$name_department_award), ]
+
+trel_dep <- test[,c("name_department_award", "zipcode_company", "name_agency_award", "amount_award", "state_company", "year_budget")]
+
+names(trel_dep)[1]<- "Department"
+
+trel_dep <- nest(trel_dep, data = !c("Department"))
+
+#example_data <- trel_dep[1,2][[1]][[1]]
+
+testA <- testdata %>%
+    distinct(year_budget)
+  
+testB <- testdata %>%
+    distinct(name_agency_award)
+  
+agency_heat_map_plot <- function(data){
+  test <- data
+  
+  dataframeA <- data.frame()
+  
+  for(i in 1:length(testA$year_budget)){
+    for(j in 1:length(testB$name_agency_award)){
+      dataframeB <- test %>%
+        filter(year_budget == testA$year_budget[i]) %>%
+        filter(name_agency_award == testB$name_agency_award[j])
+      
+      h <- if(is.na(sum(dataframeB$amount_award))){0}else{sum(dataframeB$amount_award)}
+      
+      dataframeA <- data.frame(rbind(dataframeA, cbind(testA$year_budget[i], testB$name_agency_award[j], h)))
+    }
+  }
+  names(dataframeA)[1] <- 'Year'
+  names(dataframeA)[2] <- 'Agency'
+  names(dataframeA)[3] <- 'Award'
+  
+  pl <- ggplot() +
+    geom_tile(data = dataframeA, mapping = aes(x = as.numeric(Year), y = Agency, fill = as.numeric(Award), text = paste("Year:", Year, "- Award Amount: $", Award, sep = " "))) +
+    scale_fill_continuous(tran = 'log10') +
+    scale_x_continuous(name = 'Year', limits = c(1988, NA)) +
+    labs(x = "Year", y = "Agency", fill = "Award") +
+    theme(axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          legend.position = 'none')
+   # add_text(text_position = 'top right')
+
+  ggplotly(pl, tooltip = c("text", "Agency"))
+           
+}
+
+trel_dept <- trel_dep %>% 
+  mutate(
+    state_plot = map_plot(data, agency_heat_map_plot),
+    state = purrr::map_chr(data, ~ paste(unique(.x$state_company), collapse = ",") %>% str_remove(",NA|NA,")),
+    zipcode = purrr::map_chr(data, ~paste(unique(.x$zipcode_company), collapse = ",") %>% str_remove_all(",NA|NA,"))
+    ) 
+
+trel_dept %>% 
+  trelliscope(name = "Agency Heat Map Plots", nrow = 2, ncol = 2,
+              path = '/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/PersonalFolders/Becca Ebersole')
+```
+
+```{r}
+#same as the function above but nested by zipcode
+
+#make a heat plot 
+
+#Year amount awarded
+#Department and the agency
+#Relevant Columns:
+#-name_department_award
+#-name_agency_award
+#-amount_award
+#-year_budget
+
+test_zip <- testdata[!is.na(testdata$zipcode_company), ]
+
+trel_zip <- test_zip[,c("name_department_award", "zipcode_company", "name_agency_award", "amount_award", "state_company", "year_budget")]
+
+names(trel_zip)[2] <- "Zipcode"
+
+trel_zip <- nest(trel_zip, data = !c("Zipcode"))
+
+#example_data_zip <- trel6[1,2][[1]][[1]]
+
+testA <- testdata %>%
+    distinct(year_budget)
+  
+testB <- testdata %>%
+    distinct(name_agency_award)
+  
+agency_heat_map_plot_zip <- function(data){
+  test <- data
+  
+  dataframeA <- data.frame()
+  
+  for(i in 1:length(testA$year_budget)){
+    for(j in 1:length(testB$name_agency_award)){
+      dataframeB <- test %>%
+        filter(year_budget == testA$year_budget[i]) %>%
+        filter(name_agency_award == testB$name_agency_award[j])
+      
+      h <- if(is.na(sum(dataframeB$amount_award))){0}else{sum(dataframeB$amount_award)}
+      
+      dataframeA <- data.frame(rbind(dataframeA, cbind(testA$year_budget[i], testB$name_agency_award[j], h)))
+    }
+  }
+  names(dataframeA)[1] <- 'Year'
+  names(dataframeA)[2] <- 'Agency'
+  names(dataframeA)[3] <- 'Award'
+  
+  pl <- ggplot() +
+    geom_tile(data = dataframeA, mapping = aes(x = as.numeric(Year), y = Agency, fill = as.numeric(Award), text = paste("Year:", Year, "- Award Amount: $", Award, sep = " "))) +
+    scale_fill_continuous(tran = 'log10') +
+    scale_x_continuous(name = 'Year', limits = c(1988, NA)) +
+    labs(x = "Year", y = "Agency", fill = "Award") +
+    theme(axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          legend.position = 'none')
+
+  ggplotly(pl, tooltip = c("text", "Agency"))
+}
+
+trel_z <- trel_zip %>% 
+  mutate(
+    state_plot = map_plot(data, agency_heat_map_plot_zip),
+    state = purrr::map_chr(data, ~ paste(unique(.x$state_company), collapse = ",") %>%
+                             str_remove(",NA|NA,")) 
+    ) 
+
+trel_z %>% 
+  trelliscope(name = "Agency Heat Map Plots by Zipcode", nrow = 2, ncol = 2, path = '/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/PersonalFolders/Becca Ebersole')
+```
+
+```{r}
+#same as the function above but nested by state
+
+#make a heat plot 
+
+#Year amount awarded
+#Department and the agency
+#Relevant Columns:
+#-name_department_award
+#-name_agency_award
+#-amount_award
+#-year_budget
+
+test_stat <- testdata[!is.na(testdata$state_company), ]
+
+test_stat <- test_stat %>%
+  filter(!state_company %in% c('ATTIKI', 'BC', 'CONSTANTA', 'MP', 'RHEINLAND-PFALZ', 'ROMA'))
+
+trel_stat <- test_stat[,c("name_department_award", "zipcode_company", "name_agency_award", "amount_award", "state_company", "year_budget")]
+
+names(trel_stat)[5]<- "State"
+
+trel_stat <- nest(trel_stat, data = !c("State"))
+
+#example_data <- trel_state[1,2][[1]][[1]]
+
+testA <- testdata %>%
+    distinct(year_budget)
+  
+testB <- testdata %>%
+    distinct(name_agency_award)
+  
+agency_heat_map_plot_state <- function(data){
+  test <- data
+  
+  dataframeA <- data.frame()
+  
+  for(i in 1:length(testA$year_budget)){
+    for(j in 1:length(testB$name_agency_award)){
+      dataframeB <- test %>%
+        filter(year_budget == testA$year_budget[i]) %>%
+        filter(name_agency_award == testB$name_agency_award[j])
+      
+      h <- if(is.na(sum(dataframeB$amount_award))){0}else{sum(dataframeB$amount_award)}
+      
+      dataframeA <- data.frame(rbind(dataframeA, cbind(testA$year_budget[i], testB$name_agency_award[j], h)))
+    }
+  }
+  names(dataframeA)[1] <- 'Year'
+  names(dataframeA)[2] <- 'Agency'
+  names(dataframeA)[3] <- 'Award'
+  
+  pl <- ggplot() +
+    geom_tile(data = dataframeA, mapping = aes(x = as.numeric(Year), y = Agency, fill = as.numeric(Award), text = paste("Year:", Year, "- Award Amount: $", Award, sep = " "))) +
+    scale_fill_continuous(tran = 'log10') +
+    scale_x_continuous(name = 'Year', limits = c(1988, NA)) +
+    labs(x = "Year", y = "Agency", fill = "Award") +
+    theme(axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          legend.position = 'none')
+
+  ggplotly(pl, tooltip = c("text", "Agency"))
+}
+
+trel_state <- trel_stat %>% 
+  mutate(
+    state_plot = map_plot(data, agency_heat_map_plot_state),
+zipcode = purrr::map_chr(data, ~paste(unique(.x$zipcode_company), collapse = ",") %>% str_remove_all(",NA|NA,"))
+
+    ) 
+
+trel_state %>% 
+  trelliscope(name = "Agency Heat Map Plots by State", nrow = 2, ncol = 2, path = '/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/PersonalFolders/Becca Ebersole')
+```
+
+```{r}
+# nested by name_program
+
+#What programs is funding going towards?
+#Relevant Columns:
+#-name_program
+#-name_agency_award
+#-name_department_award
+#-amount_award
+#-state_company
+#-zipcode_company
+#-year_budget
+
+test_pro <- testdata[!is.na(testdata$name_agency_award), ]
+
+trel_pro <- test_pro[,c("name_department_award", "zipcode_company", "name_agency_award", "amount_award", "state_company", "year_budget", "name_program", "name_sector_naics", "name_product_service")]
+
+names(trel_pro)[3]<- "Agency"
+
+trel_prog <- nest(trel_pro, data = !c("Agency"))
+
+testA <- testdata %>%
+    distinct(year_budget)
+  
+testB <- testdata %>%
+    distinct(name_program)
+  
+program_heat_map_plot_agency <- function(data){
+  test <- data
+  
+  dataframeA <- data.frame()
+  
+  for(i in 1:length(testA$year_budget)){
+    for(j in 1:length(testB$name_program)){
+      dataframeB <- test %>%
+        filter(year_budget == testA$year_budget[i]) %>%
+        filter(name_program == testB$name_program[j])
+      
+      h <- if(is.na(sum(dataframeB$amount_award))){0}else{sum(dataframeB$amount_award)}
+      
+      dataframeA <- data.frame(rbind(dataframeA, cbind(testA$year_budget[i], testB$name_program[j], h)))
+    }
+  }
+  names(dataframeA)[1] <- 'Year'
+  names(dataframeA)[2] <- 'Program'
+  names(dataframeA)[3] <- 'Award'
+  
+  pl <- ggplot() +
+    geom_tile(data = dataframeA, mapping = aes(x = as.numeric(Year), y = Program, fill = as.numeric(Award), text = paste("Year:", Year, "- Award Amount: $", Award, sep = " "))) +
+    scale_fill_continuous(tran = 'log10') +
+    scale_x_continuous(name = 'Year', limits = c(1988, NA)) +
+    labs(x = "Year", y = "Program", fill = "Award") +
+    theme(axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          legend.position = 'none')
+
+  ggplotly(pl, tooltip = c("text", "Program"))
+}
+
+trel_prog <- trel_prog %>% 
+  mutate(
+    state_plot = map_plot(data, program_heat_map_plot_agency),
+zipcode = purrr::map_chr(data, ~paste(unique(.x$zipcode_company), collapse = ",") %>% str_remove_all(",NA|NA,"))
+
+    ) 
+
+trel_prog %>% 
+  trelliscope(name = "Program Heat Map Plots by Agency", nrow = 2, ncol = 2, path = '/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/PersonalFolders/Becca Ebersole')
+
+
+```
+
+```{r}
+testd <- testdata %>%
+  rename(year = year_budget)
+
+all_dat <- left_join(poll_data, testd, by = 'year')
+
+```
+
