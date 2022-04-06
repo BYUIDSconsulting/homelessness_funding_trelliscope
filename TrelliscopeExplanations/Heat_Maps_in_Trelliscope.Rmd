@@ -1,0 +1,122 @@
+---
+title: "Heat Maps in Trelliscope"
+author: "Becca Ebersole"
+date: "04/05/2022"
+output: github_document
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load in Libraries
+
+```{r message = FALSE, warning = FALSE}
+library(tidyverse)
+library(trelliscopejs)
+library(ggplot2)
+library(plotly)
+library(purrr)
+```
+
+### Format the Data
+
+First, we load in the data and choose the columns that we want to use to make the graph and any additional columns that we may want to use to sort by. For this example, for the graph we will use:
+
+* Department (`name_department_award`)
+* Agency (`name_agency_award`)
+* Award (`amount_award`)
+* Year (`year_budget`)
+
+The factors we will use to sort by are:
+
+* State (`state_company`)
+* Zip code (`zipcode_company`)
+
+```{r message = FALSE, warning = FALSE}
+testdata <- read.csv('/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/data/homelessness/fsr_input.tsv.gz', sep = ',', header = TRUE)
+
+test <- testdata[!is.na(testdata$name_department_award), ] # This will remove all of the NAs from the Department because this is the column we are faceting by
+
+trel_dep <- test[,c("name_department_award", "zipcode_company", "name_agency_award", "amount_award", "state_company", "year_budget")]
+
+names(trel_dep)[1]<- "Department" # We will rename the name_department_award to Department
+```
+
+We will facet our trelliscope by Department so we will nest the data by Department
+
+```{r message=FALSE, warning=FALSE}
+trel_dep <- nest(trel_dep, data = !c("Department"))
+```
+
+We will start to set up some variables that we will use for our function. We will make a variable to store 
+every unique year in year_budget and another variable to store every unique agency in name_agency_award. We will
+use these two variables to run through every year and every agency. 
+
+```{r message=FALSE, warning=FALSE}
+testA <- testdata %>%
+    distinct(year_budget) # This will store every unique year in year_budget
+  
+testB <- testdata %>%
+    distinct(name_agency_award) # This will store every unique agency in name_agency_award
+```
+
+We will now make our function which will be applied for every department and creates an interactive heat map.
+
+```{r message=FALSE, warning=FALSE}
+agency_heat_map_plot <- function(data){
+  test <- data
+  
+  dataframeA <- data.frame() # This will be used to store
+  
+  # These two for loops will go through both the year_budget and the name_agency_award and it will find the amount_award for each year for each agency and 
+  for(i in 1:length(testA$year_budget)){
+    for(j in 1:length(testB$name_agency_award)){
+      dataframeB <- test %>%
+        filter(year_budget == testA$year_budget[i]) %>%
+        filter(name_agency_award == testB$name_agency_award[j])
+      
+      h <- if(is.na(sum(dataframeB$amount_award))){0}else{sum(dataframeB$amount_award)}
+      
+      dataframeA <- data.frame(rbind(dataframeA, cbind(testA$year_budget[i], testB$name_agency_award[j], h)))
+    }
+  }
+  # Rename the columns so it's presentable in the graph
+  names(dataframeA)[1] <- 'Year'
+  names(dataframeA)[2] <- 'Agency'
+  names(dataframeA)[3] <- 'Award'
+  
+  # Make the heat map graph
+  pl <- ggplot() +
+    geom_tile(data = dataframeA, mapping = aes(x = as.numeric(Year), y = Agency, fill = as.numeric(Award), text = paste("Year:", Year, "- Award Amount: $", Award, sep = " "))) + # The text is what the interactive label is for each tile
+    scale_fill_continuous(tran = 'log10') + # This is to scale the amount_award
+    scale_x_continuous(name = 'Year', limits = c(1988, NA)) +
+    labs(x = "Year", y = "Agency", fill = "Award") +
+    theme(axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          legend.position = 'none')
+
+  # We will put the ggplot into a ggplotly so that it is interactive
+  ggplotly(pl, tooltip = c("text", "Agency"))
+           
+}
+```
+
+We will extract the states from the `state_company` column and all of the zip codes from the `zipcode_company` column. This will make it so we can sort the graphs by the state or zip code that we want. 
+```{r message=FALSE, warning=FALSE}
+trel_dept <- trel_dep %>% 
+  mutate(
+    state_plot = map_plot(data, agency_heat_map_plot),
+    state = purrr::map_chr(data, ~ paste(unique(.x$state_company), collapse = ",") %>% str_remove(",NA|NA,")),
+    zipcode = purrr::map_chr(data, ~paste(unique(.x$zipcode_company), collapse = ",") %>% str_remove_all(",NA|NA,"))
+    ) 
+```
+
+We will now pipe `trel_dept` into the trelliscope function so it will make the multiple graphs and group them together.
+```{r message=FALSE, warning=FALSE}
+trel_dept %>% 
+  trelliscope(name = "Agency Heat Map Plots by Department", nrow = 2, ncol = 2,
+              path = '/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/PersonalFolders/Becca Ebersole')
+```
+
