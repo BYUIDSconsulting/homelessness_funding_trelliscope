@@ -25,28 +25,15 @@ devtools::install_github("wilkox/ggfittext")
 library(tidyverse)
 library(trelliscopejs)
 library(plotly)
-library(leaflet)
-library(maps)
-library(USAboundaries)
 library(ggplot2)
 library(purrr)
 library(tidyr)
 library(tidyselect)
-library(ggfittext)
-library(networkD3)
 ```
 
 ```{r load_data}
 # Use this R-Chunk to import all your datasets!
 testdata <- read.csv('/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/data/homelessness/fsr_input.tsv.gz', sep = ',', header = TRUE)
-
-#test1 <- testdata %>%
-#  slice_head(n = 100)
-
-#political affiliation data by county
-poll_data <- read.table('/Users/Becca/Downloads/countypres_2000-2020.tab', sep = '\t', header = TRUE)
-
-#demographics of each county
 ```
 
 ```{r}
