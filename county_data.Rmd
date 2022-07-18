@@ -1,0 +1,290 @@
+---
+title: "county data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(tidyselect)
+library(dplyr)
+library(janitor)
+library(stringr)
+```
+
+```{r}
+county_2019 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2019_excel.xlsx')
+
+county_2018 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2018_excel.xlsx')
+
+county_2017 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2017_excel.xlsx')
+
+county_2016 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2016_excel.xlsx')
+
+county_2015 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2015_excel.xlsx')
+
+county_2014 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2014_excel.xlsx')
+
+county_2013 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2013_excel.xlsx')
+
+county_2012 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2012_excel.xlsx')
+
+county_2011 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2011_excel.xlsx')
+
+county_2010 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2010_excel.xlsx')
+
+county_2009 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2009_excel.xlsx')
+
+county_2008 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2008_excel.xlsx')
+
+county_2007 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2007_excel.xlsx')
+
+county_2006 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2006_excel.xlsx')
+
+county_2005 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2005_excel.xlsx')
+
+county_2004 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/county_data/county_data_2004a_excel.xlsx')
+```
+
+```{r}
+county_2019$year <- 2019
+county_2019 <- separate(county_2019, col = State, into = c("State", "Type"), sep = '-')
+county_2019 <- county_2019 %>%
+  fill(State, .direction = 'down')
+county_2019 <- county_2019 %>%
+  fill(Type, .direction = 'down')
+county_2019 <- county_2019 %>%
+  clean_names()
+county_2019$type <- trimws(county_2019$type, which = c("both"))
+county_2019$state <- str_replace(county_2019$state, 'Nonmetropolitan Counties', '')
+county_2019$state <- str_replace(county_2019$state, 'Metropolitan Counties', '')
+county_2019$state <- trimws(county_2019$state, which = c("both"))
+
+
+county_2018$year <- 2018
+county_2018 <- separate(county_2018, col = State, into = c("State", "Type"), sep = '-')
+county_2018 <- county_2018 %>%
+  fill(State, .direction = 'down')
+county_2018 <- county_2018 %>%
+  fill(Type, .direction = 'down')
+county_2018 <- county_2018 %>%
+  clean_names()
+county_2018$type <- trimws(county_2018$type, which = c("both"))
+county_2018$state <- str_replace(county_2018$state, 'Nonmetropolitan Counties', '')
+county_2018$state <- str_replace(county_2018$state, 'Metropolitan Counties', '')
+county_2018$state <- trimws(county_2018$state, which = c("both"))
+
+county_2017$year <- 2017
+county_2017 <- separate(county_2017, col = State, into = c("State", "Type"), sep = '-')
+county_2017 <- county_2017 %>%
+  fill(State, .direction = 'down')
+county_2017 <- county_2017 %>%
+  fill(Type, .direction = 'down')
+county_2017 <- county_2017 %>%
+  clean_names()
+county_2017$type <- trimws(county_2017$type, which = c("both"))
+county_2017$state <- str_replace(county_2017$state, 'Nonmetropolitan Counties', '')
+county_2017$state <- str_replace(county_2017$state, 'Metropolitan Counties', '')
+county_2017$state <- trimws(county_2017$state, which = c("both"))
+
+county_2016$year <- 2016
+county_2016 <- separate(county_2016, col = State, into = c("State", "Type"), sep = '-')
+county_2016 <- county_2016 %>%
+  fill(State, .direction = 'down')
+county_2016 <- county_2016 %>%
+  fill(Type, .direction = 'down')
+county_2016 <- county_2016 %>%
+  clean_names()
+county_2016$type <- trimws(county_2016$type, which = c("both"))
+county_2016$state <- str_replace(county_2016$state, 'Nonmetropolitan Counties', '')
+county_2016$state <- str_replace(county_2016$state, 'Metropolitan Counties', '')
+county_2016$state <- trimws(county_2016$state, which = c("both"))
+
+county_2015$year <- 2015
+county_2015 <- separate(county_2015, col = State, into = c("State", "Type"), sep = '-')
+county_2015 <- county_2015 %>%
+  fill(State, .direction = 'down')
+county_2015 <- county_2015 %>%
+  fill(Type, .direction = 'down')
+county_2015 <- county_2015 %>%
+  clean_names()
+county_2015$type <- trimws(county_2015$type, which = c("both"))
+county_2015$state <- str_replace(county_2015$state, 'Nonmetropolitan Counties', '')
+county_2015$state <- str_replace(county_2015$state, 'Metropolitan Counties', '')
+county_2015$state <- trimws(county_2015$state, which = c("both"))
+
+county_2014$year <- 2014
+county_2014 <- separate(county_2014, col = State, into = c("State", "Type"), sep = '-')
+county_2014 <- county_2014 %>%
+  fill(State, .direction = 'down')
+county_2014 <- county_2014 %>%
+  fill(Type, .direction = 'down')
+county_2014 <- county_2014 %>%
+  clean_names()
+county_2014$type <- trimws(county_2014$type, which = c("both"))
+county_2014$state <- str_replace(county_2014$state, 'Nonmetropolitan Counties', '')
+county_2014$state <- str_replace(county_2014$state, 'Metropolitan Counties', '')
+county_2014$state <- trimws(county_2014$state, which = c("both"))
+
+county_2013$year <- 2013
+county_2013 <- separate(county_2013, col = State, into = c("State", "Type"), sep = '-')
+county_2013 <- county_2013 %>%
+  fill(State, .direction = 'down')
+county_2013 <- county_2013 %>%
+  fill(Type, .direction = 'down')
+county_2013 <- county_2013 %>%
+  clean_names()
+county_2013$type <- trimws(county_2013$type, which = c("both"))
+county_2013$state <- str_replace(county_2013$state, 'Nonmetropolitan Counties', '')
+county_2013$state <- str_replace(county_2013$state, 'Metropolitan Counties', '')
+county_2013$state <- trimws(county_2013$state, which = c("both"))
+
+county_2012$year <- 2012
+county_2012 <- separate(county_2012, col = State, into = c("State", "Type"), sep = '-')
+county_2012 <- county_2012 %>%
+  fill(State, .direction = 'down')
+county_2012 <- county_2012 %>%
+  fill(Type, .direction = 'down')
+county_2012 <- county_2012 %>%
+  clean_names()
+county_2012$type <- trimws(county_2012$type, which = c("both"))
+county_2012$state <- str_replace(county_2012$state, 'Nonmetropolitan Counties', '')
+county_2012$state <- str_replace(county_2012$state, 'Metropolitan Counties', '')
+county_2012$state <- trimws(county_2012$state, which = c("both"))
+
+county_2011$year <- 2011
+county_2011 <- separate(county_2011, col = State, into = c("State", "Type"), sep = '-')
+county_2011 <- county_2011 %>%
+  fill(State, .direction = 'down')
+county_2011 <- county_2011 %>%
+  fill(Type, .direction = 'down')
+county_2011 <- county_2011 %>%
+  clean_names()
+county_2011$type <- trimws(county_2011$type, which = c("both"))
+county_2011$state <- str_replace(county_2011$state, 'Nonmetropolitan Counties', '')
+county_2011$state <- str_replace(county_2011$state, 'Metropolitan Counties', '')
+county_2011$state <- trimws(county_2011$state, which = c("both"))
+
+county_2010$year <- 2010
+county_2010 <- separate(county_2010, col = State, into = c("State", "Type"), sep = '-')
+county_2010 <- county_2010 %>%
+  fill(State, .direction = 'down')
+county_2010 <- county_2010 %>%
+  fill(Type, .direction = 'down')
+county_2010 <- county_2010 %>%
+  clean_names()
+county_2010$type <- trimws(county_2010$type, which = c("both"))
+county_2010$state <- str_replace(county_2010$state, 'Nonmetropolitan Counties', '')
+county_2010$state <- str_replace(county_2010$state, 'Metropolitan Counties', '')
+county_2010$state <- trimws(county_2010$state, which = c("both"))
+
+county_2009$year <- 2009
+county_2009 <- separate(county_2009, col = State, into = c("State", "Type"), sep = '-')
+county_2009 <- county_2009 %>%
+  fill(State, .direction = 'down')
+county_2009 <- county_2009 %>%
+  fill(Type, .direction = 'down')
+county_2009 <- county_2009 %>%
+  clean_names()
+county_2009$type <- trimws(county_2009$type, which = c("both"))
+county_2009$state <- str_replace(county_2009$state, 'Nonmetropolitan Counties', '')
+county_2009$state <- str_replace(county_2009$state, 'Metropolitan Counties', '')
+county_2009$state <- trimws(county_2009$state, which = c("both"))
+
+county_2008$year <- 2008
+county_2008 <- separate(county_2008, col = State, into = c("State", "Type"), sep = '-')
+county_2008 <- county_2008 %>%
+  fill(State, .direction = 'down')
+county_2008 <- county_2008 %>%
+  fill(Type, .direction = 'down')
+county_2008 <- county_2008 %>%
+  clean_names()
+county_2008$type <- trimws(county_2008$type, which = c("both"))
+county_2008$state <- str_replace(county_2008$state, 'Nonmetropolitan Counties', '')
+county_2008$state <- str_replace(county_2008$state, 'Metropolitan Counties', '')
+county_2008$state <- trimws(county_2008$state, which = c("both"))
+
+county_2007$year <- 2007
+county_2007 <- separate(county_2007, col = State, into = c("State", "Type"), sep = '-')
+county_2007 <- county_2007 %>%
+  fill(State, .direction = 'down')
+county_2007 <- county_2007 %>%
+  fill(Type, .direction = 'down')
+county_2007 <- county_2007 %>%
+  clean_names()
+county_2007$type <- trimws(county_2007$type, which = c("both"))
+county_2007$state <- str_replace(county_2007$state, 'Nonmetropolitan Counties', '')
+county_2007$state <- str_replace(county_2007$state, 'Metropolitan Counties', '')
+county_2007$state <- trimws(county_2007$state, which = c("both"))
+
+county_2006$year <- 2006
+county_2006 <- separate(county_2006, col = State, into = c("State", "Type"), sep = '-')
+county_2006 <- county_2006 %>%
+  fill(State, .direction = 'down')
+county_2006 <- county_2006 %>%
+  fill(Type, .direction = 'down')
+county_2006 <- county_2006 %>%
+  clean_names()
+county_2006$type <- trimws(county_2006$type, which = c("both"))
+county_2006$state <- str_replace(county_2006$state, 'Nonmetropolitan Counties', '')
+county_2006$state <- str_replace(county_2006$state, 'Metropolitan Counties', '')
+county_2006$state <- trimws(county_2006$state, which = c("both"))
+
+county_2005$year <- 2005
+county_2005 <- separate(county_2005, col = State, into = c("State", "Type"), sep = '-')
+county_2005 <- county_2005 %>%
+  fill(State, .direction = 'down')
+county_2005 <- county_2005 %>%
+  fill(Type, .direction = 'down')
+county_2005 <- county_2005 %>%
+  clean_names()
+county_2005$type <- trimws(county_2005$type, which = c("both"))
+county_2005$state <- str_replace(county_2005$state, 'Nonmetropolitan Counties', '')
+county_2005$state <- str_replace(county_2005$state, 'Metropolitan Counties', '')
+county_2005$state <- trimws(county_2005$state, which = c("both"))
+
+county_2004$year <- 2004
+county_2004 <- separate(county_2004, col = State, into = c("State", "Type"), sep = '-')
+county_2004 <- county_2004 %>%
+  fill(State, .direction = 'down')
+county_2004 <- county_2004 %>%
+  fill(Type, .direction = 'down')
+county_2004 <- county_2004 %>%
+  clean_names()
+county_2004$type <- trimws(county_2004$type, which = c("both"))
+county_2004$state <- str_replace(county_2004$state, 'Nonmetropolitan Counties', '')
+county_2004$state <- str_replace(county_2004$state, 'Metropolitan Counties', '')
+county_2004$state <- trimws(county_2004$state, which = c("both"))
+```
+
+```{r}
+county <- rbind(county_2019, county_2018, county_2017, county_2016, county_2015, county_2014, county_2013, county_2012, county_2011, county_2010, county_2009, county_2008, county_2007, county_2006, county_2005, county_2004)
+
+write.csv(county, '/Users/Becca/Documents/Data Consulting/county_data.csv')
+```
+
+```{r}
+clean <- function(data, year){
+  data <- separate(data, col = State, into = c("State", "Type"), sep = '-')
+  data <- data %>%
+  fill(State, .direction = 'down')
+  data <- data %>%
+  fill(Type, .direction = 'down')
+}
+```
+
+```{r}
+homel <- read.csv('/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/data/homelessness/fsr_input.tsv.gz', sep = ',', header = TRUE)
+
+homel <- homel %>%
+  rename(`year` = `year_budget`)
+```
+
+```{r}
+together <- inner_join(homel, county)
+```
+

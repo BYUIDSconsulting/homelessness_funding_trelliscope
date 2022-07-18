@@ -1,0 +1,51 @@
+---
+title: "shiny"
+output: ioslides_presentation
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(shiny)
+library(DT)
+library(leaflet)
+library(dplyr)
+library(cartography)
+library(ggplot2)
+library(sp)
+library(ggmap)
+library(tmap)
+library(mapview)
+library(tidyr)
+```
+
+```{r}
+# import data
+county
+```
+```{r}
+allzips <- readRDS("/Users/Becca/Downloads/superzip.rds")
+allzips$latitude <- jitter(allzips$latitude)
+allzips$longitude <- jitter(allzips$longitude)
+allzips$college <- allzips$college * 100
+allzips$zipcode <- formatC(allzips$zipcode, width=5, format="d", flag="0")
+row.names(allzips) <- allzips$zipcode
+
+
+```
+
+```{r}
+ggplot(data = county, aes(x = year, y = `Violent crime`, group = State, by = State)) +
+  geom_line(aes(color = State)) +
+  theme(legend.position = "None")
+```
+
+```{r}
+ui <- fluidPage(
+  
+)
+```
+

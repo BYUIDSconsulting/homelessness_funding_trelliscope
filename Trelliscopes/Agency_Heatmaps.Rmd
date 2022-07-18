@@ -57,26 +57,26 @@ poll_data <- read.table('/Users/Becca/Downloads/countypres_2000-2020.tab', sep =
 #-amount_award
 #-year_budget
 
-test <- testdata[!is.na(testdata$name_department_award), ]
+test <- testdata[!is.na(testdata$name_department_award), ] #takes all of the NAs out of the column name_department_award
 
-trel_dep <- test[,c("name_department_award", "zipcode_company", "name_agency_award", "amount_award", "state_company", "year_budget")]
+trel_dep <- test[,c("name_department_award", "zipcode_company", "name_agency_award", "amount_award", "state_company", "year_budget")] #select the columns that you want
 
-names(trel_dep)[1]<- "Department"
+names(trel_dep)[1]<- "Department" #rename name_department_award to Department to simplify
 
-trel_dep <- nest(trel_dep, data = !c("Department"))
+trel_dep <- nest(trel_dep, data = !c("Department")) #nest all the other columns into data except for Department
 
-#example_data <- trel_dep[1,2][[1]][[1]]
+#example_data <- trel_dep[1,2][[1]][[1]] #look at the tibble of a department
 
 testA <- testdata %>%
-    distinct(year_budget)
+    distinct(year_budget) #find every unique year in year_budget
   
 testB <- testdata %>%
-    distinct(name_agency_award)
+    distinct(name_agency_award) #find every unique agency in name_agency_award
   
 agency_heat_map_plot <- function(data){
   test <- data
   
-  dataframeA <- data.frame()
+  dataframeA <- data.frame() #make dataframeA a dataframe
   
   for(i in 1:length(testA$year_budget)){
     for(j in 1:length(testB$name_agency_award)){
@@ -89,10 +89,12 @@ agency_heat_map_plot <- function(data){
       dataframeA <- data.frame(rbind(dataframeA, cbind(testA$year_budget[i], testB$name_agency_award[j], h)))
     }
   }
+  #rename these columns so they look pretty on the graph
   names(dataframeA)[1] <- 'Year'
   names(dataframeA)[2] <- 'Agency'
   names(dataframeA)[3] <- 'Award'
   
+  #actually make the graph
   pl <- ggplot() +
     geom_tile(data = dataframeA, mapping = aes(x = as.numeric(Year), y = Agency, fill = as.numeric(Award), text = paste("Year:", Year, "- Award Amount: $", Award, sep = " "))) +
     scale_fill_continuous(tran = 'log10') +
@@ -103,6 +105,7 @@ agency_heat_map_plot <- function(data){
           legend.position = 'none')
    # add_text(text_position = 'top right')
 
+  #ggplotly makes theh graph interactive
   ggplotly(pl, tooltip = c("text", "Agency"))
            
 }
@@ -114,9 +117,10 @@ trel_dept <- trel_dep %>%
     zipcode = purrr::map_chr(data, ~paste(unique(.x$zipcode_company), collapse = ",") %>% str_remove_all(",NA|NA,"))
     ) 
 
+#make the trelliscope
 trel_dept %>% 
   trelliscope(name = "Agency Heat Map Plots", nrow = 2, ncol = 2,
-              path = '/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/PersonalFolders/Becca Ebersole')
+              path = '/Users/Becca/Documents/Data Consulting/sheldon_trelliscope_WI22/PersonalFolders/Becca Ebersole') #path = puts all of the trelliscopes that we make into one place so we can switch between them easily
 ```
 
 ```{r}

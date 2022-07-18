@@ -1,0 +1,618 @@
+---
+title: "collecting data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(tidyselect)
+library(dplyr)
+```
+
+```{r}
+`2019` <- read_excel('/Users/Becca/Downloads/table-69.xls', skip = 3)
+`2018` <- read_excel('/Users/Becca/Downloads/table-69-2.xls', skip = 3)
+`2017` <- read_excel('/Users/Becca/Downloads/table-69-3.xls', skip = 3)
+`2016` <- read_excel('/Users/Becca/Downloads/table-22.xls', skip = 3)
+`2015` <- read_excel('/Users/Becca/Downloads/table_69_arrest_by_state_2015.xls', skip = 3)
+`2014` <- read_excel('/Users/Becca/Downloads/Table_69_Arrest_by_State_2014.xls', skip = 3)
+`2013` <- read_excel('/Users/Becca/Downloads/table_69_arrest_by_state_2013.xls', skip = 3)
+`2012` <- read_excel('/Users/Becca/Downloads/table_69_arrest_by_state_2012.xls', skip = 3)
+`2011` <- read_excel('/Users/Becca/Downloads/table_69_arrest_by_state_2011.xls', skip = 3)
+`2010` <- read_excel('/Users/Becca/Downloads/10tbl69.xls', skip = 3)
+`2009` <- read_excel('/Users/Becca/Downloads/09tbl69.xls', skip = 3)
+`2008` <- read_excel('/Users/Becca/Downloads/08tbl69.xls', skip = 3)
+`2007` <- read_excel('/Users/Becca/Downloads/07tbl69.xls', skip = 3)
+`2006` <- read_excel('/Users/Becca/Downloads/06tbl69.xls', skip = 3)
+`2005` <- read_excel('/Users/Becca/Downloads/05tbl69.xls', skip = 3)
+`2004` <- read_excel('/Users/Becca/Downloads/04tbl69adj.xls', skip = 4) #needs to be cleaned up
+`2003` <- read_excel('/Users/Becca/Downloads/Copy of 03tbl69.xls', skip = 4) #needs to be cleaned up
+`2002` <- read_excel('/Users/Becca/Downloads/Copy of 02tbl69.xls', skip = 4) #needs to be cleaned up
+`2001` <- read_excel('/Users/Becca/Downloads/Copy of 01tbl69.xls', skip = 4) #needs to be cleaned up
+`2000` <- read_excel('/Users/Becca/Downloads/Copy of rtbl69_00.xls', skip = 4) #needs to be cleaned up
+`1999` <- read_excel('/Users/Becca/Downloads/Copy of w99tbl69.xls', skip = 4) #needs to be cleaned up
+
+mh19_20 <- read_csv('/Users/Becca/Downloads/raw_data.csv')
+mental_health_22 <- read_csv('/Users/Becca/Downloads/csvData.csv')
+```
+```{r}
+`2019`$year <- 2019
+`2018`$year <- 2018
+`2017`$year <- 2017
+`2016`$year <- 2016
+`2015`$year <- 2015
+`2014`$year <- 2014
+`2013`$year <- 2013
+`2012`$year <- 2012
+`2011`$year <- 2011
+`2010`$year <- 2010
+`2009`$year <- 2009
+`2008`$year <- 2008
+`2007`$year <- 2007
+`2006`$year <- 2006
+`2005`$year <- 2005
+`2004`$year <- 2004
+`2003`$year <- 2003
+`2002`$year <- 2002
+`2001`$year <- 2001
+`2000`$year <- 2000
+`1999`$year <- 1999
+```
+
+```{r}
+`2019` <- `2019` %>%
+  rename(c(age_range = ...2, 
+           estimated_population = "2019\nestimated \npopulation", 
+           total = "Total\nall \nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Rape3", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug \nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst\nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws", 
+           drunkenness = "Drunkenness4", 
+           disorderly_conduct = "Disorderly\nconduct", 
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+`2018` <- `2018` %>%
+  rename(c(age_range = ...2, 
+           estimated_population = "2018\nestimated \npopulation", 
+           total = "Total\nall \nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Rape3", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug \nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst\nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws", 
+           drunkenness = "Drunkenness4", 
+           disorderly_conduct = "Disorderly\nconduct", 
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+`2017` <- `2017` %>%
+  rename(c(age_range = ...2, 
+           estimated_population = "2017\nestimated \npopulation", 
+           total = "Total\nall \nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Rape3", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug \nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst\nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws", 
+           drunkenness = "Drunkenness4", 
+           disorderly_conduct = "Disorderly\nconduct", 
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+`2016` <- `2016` %>%
+  rename(c(age_range = ...2, 
+           estimated_population = "2016\nestimated \npopulation", 
+           total = "Total\nall \nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Rape3", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug \nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst\nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws", 
+           drunkenness = "Drunkenness4", 
+           disorderly_conduct = "Disorderly\nconduct",
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+
+`2015` <- `2015` %>%
+  rename(c(age_range = ...2, 
+           estimated_population = "2015\nestimated \npopulation", 
+           total = "Total\nall \nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Rape3", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug \nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst\nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws", 
+           drunkenness = "Drunkenness4",
+           disorderly_conduct = "Disorderly\nconduct", 
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+`2014` <- `2014` %>%
+  rename(c(age_range = ...2, 
+           estimated_population = "2014\nestimated \npopulation", 
+           total = "Total\nall \nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Rape3", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug \nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst\nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws", 
+           drunkenness = "Drunkenness4", 
+           disorderly_conduct = "Disorderly\nconduct", 
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+`2013` <- `2013` %>%
+  rename(c(age_range = ...2, 
+           estimated_population = "2013\nestimated \npopulation", 
+           total = "Total\nall \nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Rape3", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug \nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst\nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws",
+           drunkenness = "Drunkenness4", 
+           disorderly_conduct = "Disorderly\nconduct", 
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+`2012` <- `2012` %>%
+  rename(c(age_range = ...2,
+           estimated_population = "2012\nestimated \npopulation", 
+           total = "Total\nall \nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Forcible\nrape", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug \nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst\nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws", 
+           drunkenness = "Drunkenness3", 
+           disorderly_conduct = "Disorderly\nconduct", 
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nforcible\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+`2011` <- `2011` %>%
+  rename(c(age_range = ...2,
+           estimated_population = "2011 \nestimated \npopulation", 
+           total = "Total \nall \nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Forcible\nrape", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug\nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst \nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws", 
+           drunkenness = "Drunkenness3", 
+           disorderly_conduct = "Disorderly\nconduct", 
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nforcible\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+`2010` <- `2010` %>%
+  rename(c(age_range = ...2,
+           estimated_population = "2010\nestimated\npopulation", 
+           total = "Total\nall\nclasses1", 
+           violent_crime = "Violent\ncrime2", 
+           property_crime = "Property\ncrime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and\nnonnegligent\nmanslaughter", 
+           rape = "Forcible\nrape", 
+           aggravated_assault = "Aggravated\nassault", 
+           larceny_theft = "Larceny-\ntheft", 
+           motor_vehicle_theft = "Motor\nvehicle\ntheft", 
+           other_assaults = "Other\nassaults", 
+           forgery_counterfeiting = "Forgery and\ncounterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen\nproperty;\nbuying,\nreceiving,\npossessing",
+           weapons_carrying_possessing_etc = "Weapons;\ncarrying,\npossessing,\netc.", 
+           drug_abuse_violations = "Drug\nabuse\nviolations", 
+           offenses_against_family_and_children = "Offenses\nagainst\nthe family\nand\nchildren",
+           driving_under_the_influence = "Driving\nunder the\ninfluence", 
+           liquor_laws = "Liquor\nlaws", 
+           drunkenness = "Drunkenness3", 
+           disorderly_conduct = "Disorderly\nconduct", 
+           all_other_offenses_except_traffic = "All other\noffenses\n(except\ntraffic)",
+           curfew_and_loitering_violations = "Curfew\nand\nloitering\nlaw\nviolations", 
+           number_of_agencies = "Number\nof\nagencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses\n(except\nforcible\nrape and\nprostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and\ncommercialized\nvice"))
+
+`2009` <- `2009` %>%
+  rename(c(age_range = ...2,
+           estimated_population = "2009 \nestimated \npopulation", 
+           total = "Total \nall \nclasses1", 
+           violent_crime = "Violent crime2", 
+           property_crime = "Property crime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and nonnegligent manslaughter", 
+           rape = "Forcible rape", 
+           aggravated_assault = "Aggravated assault", 
+           larceny_theft = "Larceny-theft", 
+           motor_vehicle_theft = "Motor vehicle theft", 
+           other_assaults = "Other assaults", 
+           forgery_counterfeiting = "Forgery and counterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen property; buying, receiving, possessing",
+           weapons_carrying_possessing_etc = "Weapons; carrying, possessing, etc.", 
+           drug_abuse_violations = "Drug \nabuse violations", 
+           offenses_against_family_and_children = "Offenses against \nthe family and children",
+           driving_under_the_influence = "Driving under the influence", 
+           liquor_laws = "Liquor laws", 
+           drunkenness = "Drunkenness3", 
+           disorderly_conduct = "Disorderly conduct", 
+           all_other_offenses_except_traffic = "All other offenses (except traffic)",
+           curfew_and_loitering_violations = "Curfew and loitering law violations", 
+           number_of_agencies = "Number of agencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses (except forcible \nrape and prostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and commercialized vice"))
+
+`2008` <- `2008` %>%
+  rename(c(age_range = ...2,
+           estimated_population = "2008 \nestimated \npopulation", 
+           total = "Total \nall \nclasses1", 
+           violent_crime = "Violent crime2", 
+           property_crime = "Property crime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and nonnegligent manslaughter", 
+           rape = "Forcible rape", 
+           aggravated_assault = "Aggravated assault", 
+           larceny_theft = "Larceny-theft", 
+           motor_vehicle_theft = "Motor vehicle theft", 
+           other_assaults = "Other assaults", 
+           forgery_counterfeiting = "Forgery and counterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen property; buying, receiving, possessing",
+           weapons_carrying_possessing_etc = "Weapons; carrying, possessing, etc.", 
+           drug_abuse_violations = "Drug \nabuse violations", 
+           offenses_against_family_and_children = "Offenses against \nthe family and children",
+           driving_under_the_influence = "Driving under the influence", 
+           liquor_laws = "Liquor laws", 
+           drunkenness = "Drunkenness3", 
+           disorderly_conduct = "Disorderly conduct", 
+           all_other_offenses_except_traffic = "All other offenses (except traffic)",
+           curfew_and_loitering_violations = "Curfew and loitering law violations", 
+           number_of_agencies = "Number of agencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses (except forcible \nrape and prostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and commercialized vice"))
+
+`2007` <- `2007` %>%
+  rename(c(age_range = ...2,
+           estimated_population = "2007 \nestimated \npopulation", 
+           total = "Total \nall \nclasses1", 
+           violent_crime = "Violent crime2", 
+           property_crime = "Property crime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and nonnegligent manslaughter", 
+           rape = "Forcible rape", 
+           aggravated_assault = "Aggravated assault", 
+           larceny_theft = "Larceny-theft", 
+           motor_vehicle_theft = "Motor vehicle theft", 
+           other_assaults = "Other assaults", 
+           forgery_counterfeiting = "Forgery and counterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen property; buying, receiving, possessing",
+           weapons_carrying_possessing_etc = "Weapons; carrying, possessing, etc.", 
+           drug_abuse_violations = "Drug \nabuse violations", 
+           offenses_against_family_and_children = "Offenses against \nthe family and children",
+           driving_under_the_influence = "Driving under the influence", 
+           liquor_laws = "Liquor laws", 
+           drunkenness = "Drunkenness3", 
+           disorderly_conduct = "Disorderly conduct", 
+           all_other_offenses_except_traffic = "All other offenses (except traffic)",
+           curfew_and_loitering_violations = "Curfew and loitering law violations", 
+           number_of_agencies = "Number of agencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses (except forcible \nrape and prostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and commercialized vice"))
+
+`2006` <- `2006` %>%
+  rename(c(age_range = ...2,
+           estimated_population = "2006 estimated population", 
+           total = "Total \nall \nclasses1", 
+           violent_crime = "Violent crime2", 
+           property_crime = "Property crime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and nonnegligent manslaughter", 
+           rape = "Forcible rape", 
+           aggravated_assault = "Aggravated assault", 
+           larceny_theft = "Larceny-theft", 
+           motor_vehicle_theft = "Motor vehicle theft", 
+           other_assaults = "Other assaults", 
+           forgery_counterfeiting = "Forgery and counterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen property; buying, receiving, possessing",
+           weapons_carrying_possessing_etc = "Weapons; carrying, possessing, etc.", 
+           drug_abuse_violations = "Drug \nabuse violations", 
+           offenses_against_family_and_children = "Offenses against \nthe family and children",
+           driving_under_the_influence = "Driving under the influence", 
+           liquor_laws = "Liquor laws", 
+           drunkenness = "Drunkenness3", 
+           disorderly_conduct = "Disorderly conduct", 
+           all_other_offenses_except_traffic = "All other offenses (except traffic)",
+           curfew_and_loitering_violations = "Curfew and loitering law violations", 
+           number_of_agencies = "Number of agencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses (except forcible \nrape and prostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and commercialized vice"))
+
+`2005` <- `2005` %>%
+  rename(c(age_range = ...2,
+           estimated_population = "2005 estimated population", 
+           total = "Total \nall \nclasses1", 
+           violent_crime = "Violent crime2", 
+           property_crime = "Property crime2", 
+           murder_and_nonnegligent_manslaughter = "Murder and nonnegligent manslaughter", 
+           rape = "Forcible rape", 
+           aggravated_assault = "Aggravated assault", 
+           larceny_theft = "Larceny-theft", 
+           motor_vehicle_theft = "Motor vehicle theft", 
+           other_assaults = "Other assaults", 
+           forgery_counterfeiting = "Forgery and counterfeiting", 
+           stolen_property_buying_receiving_possessing = "Stolen property; buying, receiving, possessing",
+           weapons_carrying_possessing_etc = "Weapons; carrying, possessing, etc.", 
+           drug_abuse_violations = "Drug \nabuse violations", 
+           offenses_against_family_and_children = "Offenses against \nthe family and children",
+           driving_under_the_influence = "Driving under the influence", 
+           liquor_laws = "Liquor laws", 
+           drunkenness = "Drunkenness3", 
+           disorderly_conduct = "Disorderly conduct", 
+           all_other_offenses_except_traffic = "All other offenses (except traffic)",
+           curfew_and_loitering_violations = "Curfew and loitering law violations", 
+           number_of_agencies = "Number of agencies", 
+           sex_offenses_except_rape_and_prostitution = "Sex offenses (except forcible \nrape and prostitution)",
+           prostitution_and_commercialized_vice = "Prostitution and commercialized vice"))
+
+#do this for 1999-2004 once the datasets have been cleaned up
+
+
+```
+
+
+```{r}
+#combine all of the datasets
+`2019` <- `2019` %>%
+  fill(State, .direction = "down")
+`2018` <- `2018` %>%
+  fill(State, .direction = 'down')
+`2017` <- `2017` %>%
+  fill(State, .direction = 'down')
+`2016` <- `2016` %>%
+  fill(State, .direction = 'down')
+`2015` <- `2015` %>%
+  fill(State, .direction = 'down')
+`2014` <- `2014` %>%
+  fill(State, .direction = 'down')
+`2013` <- `2013` %>%
+  fill(State, .direction = 'down')
+`2012` <- `2012` %>%
+  fill(State, .direction = 'down')
+`2011` <- `2011` %>%
+  fill(State, .direction = 'down')
+`2010` <- `2010` %>%
+  fill(State, .direction = 'down')
+`2009` <- `2009` %>%
+  fill(State, .direction = 'down')
+`2008` <- `2008` %>%
+  fill(State, .direction = 'down')
+`2007` <- `2007` %>%
+  fill(State, .direction = 'down')
+`2006` <- `2006` %>%
+  fill(State, .direction = 'down')
+`2005` <- `2005` %>%
+  fill(State, .direction = 'down')
+#`2004` <- `2004` %>%
+#  fill(State, .direction = 'down')
+
+#Number of agencies
+`2019` <- `2019` %>%
+  fill(number_of_agencies, .direction = "down")
+`2018` <- `2018` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2017` <- `2017` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2016` <- `2016` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2015` <- `2015` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2014` <- `2014` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2013` <- `2013` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2012` <- `2012` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2011` <- `2011` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2010` <- `2010` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2009` <- `2009` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2008` <- `2008` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2007` <- `2007` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2006` <- `2006` %>%
+  fill(number_of_agencies, .direction = 'down')
+`2005` <- `2005` %>%
+  fill(number_of_agencies, .direction = 'down')
+
+
+#Estimated population
+`2019` <- `2019` %>%
+  fill(estimated_population, .direction = "down")
+`2018` <- `2018` %>%
+  fill(estimated_population, .direction = 'down')
+`2017` <- `2017` %>%
+  fill(estimated_population, .direction = 'down')
+`2016` <- `2016` %>%
+  fill(estimated_population, .direction = 'down')
+`2015` <- `2015` %>%
+  fill(estimated_population, .direction = 'down')
+`2014` <- `2014` %>%
+  fill(estimated_population, .direction = 'down')
+`2013` <- `2013` %>%
+  fill(estimated_population, .direction = 'down')
+`2012` <- `2012` %>%
+  fill(estimated_population, .direction = 'down')
+`2011` <- `2011` %>%
+  fill(estimated_population, .direction = 'down')
+`2010` <- `2010` %>%
+  fill(estimated_population, .direction = 'down')
+`2009` <- `2009` %>%
+  fill(estimated_population, .direction = 'down')
+`2008` <- `2008` %>%
+  fill(estimated_population, .direction = 'down')
+`2007` <- `2007` %>%
+  fill(estimated_population, .direction = 'down')
+`2006` <- `2006` %>%
+  fill(estimated_population, .direction = 'down')
+`2005` <- `2005` %>%
+  fill(estimated_population, .direction = 'down')
+
+#remove last few rows
+`2019` <- `2019`[-c(103:111),]
+`2018` <- `2018`[-c(103:111),]
+`2017` <- `2017`[-c(103:111),]
+`2016` <- `2016`[-c(103:111),]
+`2015` <- `2015`[-c(103:111),]
+`2014` <- `2014`[-c(103:111),]
+`2013` <- `2013`[-c(103:111),]
+`2012` <- `2012`[-c(103:111),]
+`2011` <- `2011`[-c(103:111),]
+`2010` <- `2010`[-c(103:111),]
+`2009` <- `2009`[-c(103:111),]
+`2008` <- `2008`[-c(103:111),]
+`2007` <- `2007`[-c(103:111),]
+`2006` <- `2006`[-c(103:111),]
+`2005` <- `2005`[-c(103:111),]
+
+`2009` <- `2009` %>%
+  select(!Runaways)
+`2008` <- `2008` %>%
+  select(!Runaways)
+`2007` <- `2007` %>%
+  select(!Runaways)
+`2006` <- `2006` %>%
+  select(!Runaways)
+`2005` <- `2005` %>%
+  select(!Runaways)
+
+all <- rbind(`2019`, `2018`, `2017`, `2016`, `2015`, `2014`, `2013`, `2012`, `2011`, `2010`, `2009`, `2008`, `2007`, `2006`, `2005`)
+
+```
+
+```{r}
+#let's clean up messy datasets
+
+#2004
+`2004` <- `2004`[-c(200:206),]
+```
+

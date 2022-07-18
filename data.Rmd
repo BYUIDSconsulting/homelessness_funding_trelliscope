@@ -1,0 +1,26 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(devtools)
+devtools::install_github("UrbanInstitute/urbnmapr") #this may help with making a trelliscope
+library(urbnmapr)
+```
+
+```{r}
+hud <- read.csv(url("https://raw.githubusercontent.com/BYUIDSconsulting/PW_homelessness_SP22/master/data/collected_data/HUD.csv?token=GHSAT0AAAAAABSQE73XNAFUGHYWX4I44HK6YUC2DMA"))
+
+jobs_per_county <- read.csv(url("https://raw.githubusercontent.com/BYUIDSconsulting/PW_homelessness_SP22/master/data/collected_data/number_of_jobs_by_county_by_year.csv?token=GHSAT0AAAAAABSQE73W3NQGZNEBVQ3JPUVQYUC2EVA"))
+
+gdp_per_county <- read.csv(url("https://raw.githubusercontent.com/BYUIDSconsulting/PW_homelessness_SP22/master/data/collected_data/real_gdp_per_county_per_year.csv?token=GHSAT0AAAAAABSQE73XO7XNA33OB4R3QZ2QYUC2GQQ"))
+
+city_data <- read.csv(url("https://raw.githubusercontent.com/BYUIDSconsulting/PW_homelessness_SP22/master/data/collected_data/citydata.csv?token=GHSAT0AAAAAABSQE73XMKRWI7UJ6CVCN642YUC2ISA"))
+```
+

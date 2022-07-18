@@ -1,0 +1,235 @@
+---
+title: "data on a city"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(tidyselect)
+library(dplyr)
+```
+
+```{r}
+city_2019 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_2019_excel.xlsx')
+
+city_2018 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/2018_data_excel.xlsx')
+
+city_2017 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/2017_city_data_excel.xlsx')
+
+city_2016 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/data_2016_excel.xlsx')
+
+city_2015 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2015.xlsx')
+
+city_2014 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2014_excel.xlsx')
+
+city_2013 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2013_excel.xlsx')
+
+city_2012 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2012_excel.xlsx')
+
+city_2011 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2011_excel.xlsx')
+
+city_2010 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2010_excel.xlsx')
+
+city_2009 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2009_excel.xlsx')
+
+city_2008 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2008_excel.xlsx')
+
+city_2007 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2007_excel.xlsx')
+
+city_2006 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2006_excel.xlsx')
+
+city_2005 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2005_excel.xlsx')
+
+city_2004 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2004_excel.xlsx')
+
+city_2003 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2003_excel.xlsx')
+
+city_2003_a <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2003_A_excel.xlsx')
+
+city_2002 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2002_excel.xlsx')
+
+city_2002_a <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2002A_excel.xlsx')
+
+city_2001 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2001_excel.xlsx')
+
+city_2001_a <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2001A_excel.xlsx')
+
+city_2000 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_2000_excel.xlsx')
+
+city_1999 <- read_excel('/Users/Becca/Documents/Data Consulting/homelessness_funding_trelliscope/city_data/city_data_1999_excel.xlsx')
+```
+
+```{r}
+city_2019$year <- 2019
+city_2019 <- city_2019 %>%
+  fill(State, .direction = 'down')
+city_2019 <- city_2019 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2018$year <- 2018
+city_2018 <- city_2018 %>%
+  fill(State, .direction = "down")
+city_2018 <- city_2018 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2017$year <- 2017
+city_2017 <- city_2017 %>%
+  fill(State, .direction = 'down')
+city_2017 <- city_2017 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2016$year <- 2016
+city_2016 <- city_2016 %>%
+  fill(State, .direction = 'down')
+#city_2016 <- city_2016 %>%
+#  select(!c(`Violent crime`, `Property crime`))
+
+city_2015$year <- 2015
+city_2015 <- city_2015 %>%
+  fill(State, .direction = "down")
+city_2015 <- city_2015 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2014$year <- 2014
+city_2014 <- city_2014 %>%
+  fill(State, .direction = "down")
+city_2014 <- city_2014 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2013$year <- 2013
+city_2013 <- city_2013 %>%
+  fill(State, .direction = "down")
+city_2013 <- city_2013 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2012$year <- 2012
+city_2012 <- city_2012 %>%
+  fill(State, .direction = "down")
+city_2012 <- city_2012 %>%
+  rename(Rape = `Forcible rape`)
+city_2012 <- city_2012 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2011$year <- 2011
+city_2011 <- city_2011 %>%
+  fill(State, .direction = "down")
+city_2011 <- city_2011 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2010$year <- 2010
+city_2010 <- city_2010 %>%
+  fill(State, .direction = "down")
+city_2010 <- city_2010 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2009$year <- 2009
+city_2009 <- city_2009 %>%
+  fill(State, .direction = "down")
+city_2009 <- city_2009 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2008$year <- 2008
+city_2008 <- city_2008 %>%
+  fill(State, .direction = "down")
+city_2008 <- city_2008 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2007$year <- 2007
+city_2007 <- city_2007 %>%
+  fill(State, .direction = "down")
+city_2007 <- city_2007 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2006$year <- 2006
+city_2006 <- city_2006 %>%
+  fill(State, .direction = "down")
+city_2006 <- city_2006 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2005$year <- 2005
+city_2005 <- city_2005 %>%
+  fill(State, .direction = "down")
+city_2005 <- city_2005 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2004$year <- 2004
+city_2004 <- city_2004 %>%
+  fill(State, .direction = "down")
+city_2004 <- city_2004 %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2003_total <- rbind(city_2003, city_2003_a)
+city_2003_total$year <- 2003
+city_2003_total <- city_2003_total %>%
+  fill(State, .direction = "down")
+city_2003_total <- city_2003_total %>%
+  rename(
+    `Murder and nonnegligent manslaughter` = `Murder and non-negligent man-slaughter`
+  )
+city_2003_total <- city_2003_total %>%
+  select(!c(`Violent crime`, `Property crime`))
+
+city_2002_total <- rbind(city_2002, city_2002_a)
+city_2002_total$year <- 2002
+city_2002_total <- city_2002_total %>%
+  fill(State, .direction = "down")
+city_2002_total <- city_2002_total %>%
+  rename(
+    `Murder and nonnegligent manslaughter` = `Murder and non-negligent man-slaughter`
+  )
+
+city_2001_total <- rbind(city_2001, city_2001_a)
+city_2001_total$year <- 2001
+city_2001_total <- city_2001_total %>%
+  fill(State, .direction = "down")
+city_2001_total <- city_2001_total %>%
+  rename(
+    `Murder and nonnegligent manslaughter` = `Murder and non-negligent man-slaughter`
+  )
+city_2001_total <- city_2001_total %>%
+  select(!c(`Crime Index total`, `Modified Crime Index total`))
+
+city_2000$year <-2000
+city_2000 <- city_2000 %>%
+  fill(State, .direction = "down")
+city_2000 <- city_2000 %>%
+  rename(
+    `Murder and nonnegligent manslaughter` = `Murder and non-negligent man-slaughter`
+  )
+city_2000 <- city_2000 %>%
+  select(!c(`Crime Index total`, `Modified Crime Index total1`))
+
+city_1999$year <- 1999
+city_1999 <- city_1999 %>%
+  fill(State, .direction = "down")
+city_1999 <- city_1999 %>%
+  rename(
+    `Murder and nonnegligent manslaughter` = `Murder and non-negligent man-slaughter`
+  )
+city_1999 <- city_1999 %>%
+  select(!c(`Crime Index total`, `Modified Crime Index total`))
+
+```
+
+```{r}
+#lets combine the data
+
+city <- rbind(city_2019, city_2018, city_2017, city_2015, city_2014, city_2013, city_2012, city_2011, city_2010, city_2009, city_2008, city_2007, city_2006, city_2005, city_2004, city_2003_total, city_2002_total, city_2001_total, city_2000, city_1999)
+
+write.csv(city, '/Users/Becca/Documents/Data Consulting/citydata.csv')
+```
+
+```{r}
+# make a function to clean county data
+
+clean_county <- function(data, year){
+  data$year <- year
+  print(data)
+}
+```
+
